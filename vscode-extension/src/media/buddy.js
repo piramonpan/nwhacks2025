@@ -24,6 +24,22 @@
 		vscode.postMessage({ message: chatMessage.chatMessage })
     });
 
+	document.querySelector('.debug').addEventListener('click', () => {
+		console.log("clicked!");
+		vscode.postMessage({ message: "debug" });
+    });
+
+	document.querySelector('.brainstorm').addEventListener('click', () => {
+		console.log("clicked!");
+		vscode.postMessage({ message: "brainstorm" });
+    });
+
+	// document.querySelector('.clear').addEventListener('click', () => {
+	// 	console.log("clicked!");
+	// 	vscode.postMessage({ message: "clear" });
+	// 	vscode.oldState = { chatMessages: [] };
+    // });
+
 	function updateMessageList(chatMessages) {
 		const ol = document.querySelector('.message-list');
 		ol.textContent = '';
@@ -54,8 +70,18 @@
 	function scrollToBottom() {
 		console.log("scroll func");
 		element = document.getElementsByClassName("message-list")[0];
+		// element = document.getElementById("chat");
+		//element = document.getElementsByClassName("chat")[0];
 		console.log(element);
-		element.scrollTop = element.scrollHeight;
+		console.log("scroll top: " + element.scrollTop);
+		console.log("scroll height: " + element.scrollHeight);
+
+		setTimeout(() => {
+			element.scrollTop = element.scrollHeight - element.clientHeight; //document.getElementsByClassName("userInput")[0].clientHeight;
+		}, 1000); // Ensure the DOM has time to update
+		
+		console.log("scroll top: " + element.scrollTop);
+
 		//element.scrollToBottom;
 	}
 

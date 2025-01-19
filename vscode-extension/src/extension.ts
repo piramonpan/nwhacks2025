@@ -208,12 +208,15 @@ class BuddyChat implements vscode.WebviewViewProvider {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleMainUri}" rel="stylesheet">
 				
-				<title>AI Buddy</title>
+				<title>Debug.Me</title>
 			</head>
 
 			<body>
 				<div class="heading">
-				<h1>Chat with your code buddy</h1>
+				<h1>Chat with your Debug.Me buddy</h1>
+				<!--<button class="clear">Clear</button>-->
+				<button class="debug">Debug Mode</button>
+				<button class="brainstorm">Brainstorm Mode</button>
 				</div>
 				<div id="chat" class="chat">
 					<ol class="message-list"></ol>
