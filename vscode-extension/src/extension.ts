@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 
-async function sendToAI(context: string, prompt: string) {
+async function sendToAI(context: string, prompt: string, type: string) {
 	// // TODO: Send some data to the AI backend.
 	// console.log('(mock) AI received prompt \"' + prompt
 	// 			+ '\" with context:\n\'\'\'\n' + context + "\n\'\'\'");
@@ -38,7 +38,8 @@ async function sendToAI(context: string, prompt: string) {
     // Prepare the data to send
     const data = {
         context: context,
-        prompt: prompt
+        prompt: prompt,
+		type: type
     };
 
     try {
@@ -70,6 +71,19 @@ async function sendToAI(context: string, prompt: string) {
     }
 }
 
+function getActiveFileContents(): string | null {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const document = editor.document;
+
+	const context = "currently opened filename: " + document.fileName + "\ncurrently opened file contents+\n" + document.getText();
+	return context
+    } else {
+	//vscode.window.showErrorMessage('No active editor found.');
+	return null;
+    }
+}
+
 async function handleTerminalOutput() {
 	vscode.commands.executeCommand('workbench.view.extension.buddy');
 	// Grabs output from the terminal and sends it to the AI
@@ -95,7 +109,7 @@ async function getLastNTerminalOutput(n: number): Promise<string | null> {
 async function getTerminalOutput(): Promise<string | null> {
 	const terminal = vscode.window.activeTerminal;
 	if (!terminal) {
-		vscode.window.showErrorMessage('No terminal is currently active.');
+		//vscode.window.showErrorMessage('No terminal is currently active.');
 		return null;
 	}
 
@@ -151,15 +165,35 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		webviewView.webview.onDidReceiveMessage(message => {
-			// TODO (optional): do this without an extra variable
-			console.log("Got message from webview");
-			const afunc = async function () {
-				console.log("In async lala");
-				const terminalOutput = await handleTerminalOutput();
-				sendToAI(terminalOutput, message.message);
-				console.log("Sent to AI");
-			}
-			afunc();
+			(async () => {
+				console.log("Got message from webview");
+				let context = "";
+				// TODO: REMOVE
+				message.type = "debug";
+				switch (message.type) {
+					case "debug":
+						var fileContents = getActiveFileContents();
+						if (fileContents !== "") {
+							context = "-----BEGIN FILE CONTENTS-----\n" + getActiveFileContents() + "\n-----END FILE CONTENTS-----\n";
+						}
+						var terminalOutput = await handleTerminalOutput();
+						if (terminalOutput !== null) {
+							context += "-----BEGIN TERMINAL OUTPUT-----" + terminalOutput + "-----END TERMINAL OUTPUT-----\n";
+						}
+						break;
+					case "brainstorm":
+						var fileContents = getActiveFileContents();
+						if (fileContents !== "") {
+							context = "-----BEGIN FILE CONTENTS-----\n" + getActiveFileContents() + "\n-----END FILE CONTENTS-----\n";
+						}
+						break;
+					default:
+						break;
+				}
+				sendToAI(context, message.message, message.type);
+				console.log("sending context:\n" + context);
+				console.log("sending message:\n" + message.message);
+			})();
 		});		
 	}
 

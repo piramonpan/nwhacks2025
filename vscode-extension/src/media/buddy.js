@@ -3,7 +3,7 @@
 (function () {
 	const vscode = acquireVsCodeApi();
 
-	const oldState =  vscode.getState() || { chatMessages: [] };
+	const oldState = vscode.getState() || { chatMessages: [] };
 
 	let chatMessages = oldState.chatMessages;
 
@@ -17,12 +17,12 @@
 
 	document.querySelector('.send').addEventListener('click', () => {
 		//console.log("clicked!");
-		const chatMessage = {user: "You", chatMessage: document.getElementById("msg-input").value}
-        addMessage(chatMessage);
+		const chatMessage = { user: "You", chatMessage: document.getElementById("msg-input").value }
+		addMessage(chatMessage);
 		document.getElementById("msg-input").value = '';
 		//console.log("added message from user");
 		vscode.postMessage({ message: chatMessage.chatMessage })
-    });
+	});
 
 	function updateMessageList(chatMessages) {
 		const ol = document.querySelector('.message-list');
