@@ -4,3 +4,4 @@ assistant_response.txt
 .vscode
 node_modules
 out
+__pycache__

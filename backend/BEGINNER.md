@@ -73,6 +73,8 @@ How do you think we should approach the situation from here?
 
 # Context
 
+Try to keep your responses as similar lengths as the examples.
+
 Current conversation: {history}
 
 Human: {input}

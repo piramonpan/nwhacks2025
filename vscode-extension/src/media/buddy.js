@@ -3,7 +3,7 @@
 (function () {
 	const vscode = acquireVsCodeApi();
 
-	const oldState = vscode.getState() || { chatMessages: [] };
+	const oldState =  { chatMessages: [] };
 
 	let chatMessages = oldState.chatMessages;
 
