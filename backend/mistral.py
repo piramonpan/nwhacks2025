@@ -9,6 +9,7 @@ from datetime import datetime
 from langchain.schema import SystemMessage, HumanMessage
 import json
 from langchain_mistralai import ChatMistralAI
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 os.environ["PYTHONWARNINGS"] = os.getenv("PYTHONWARNINGS", "ignore")
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -30,28 +31,37 @@ class Mistral:
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
         # Define templates for different roles
-        self.role_templates =roles_dict
-
+        self.role_templates = roles_dict
         self.role = role
-        self.agent = ChatMistralAI(model="mistral-large-latest", api_key=api_key)  # Use your API key here
+
+        # Initialize the LLM with streaming enabled
+        self.agent = ChatMistralAI(
+            model="mistral-large-latest",
+            api_key=api_key,
+            streaming=True,  # Enable streaming
+            callbacks=[StreamingStdOutCallbackHandler()],  # Print chunks in real-time
+        )
         self.memory = ConversationBufferMemory()
 
         # Create the conversation prompt template
-        conversation_template = PromptTemplate(input_variables=['history', 'input'], template=self.role_templates[self.role])
+        conversation_template = PromptTemplate(input_variables=["history", "input"], template=self.role_templates[self.role])
 
         # Initialize the conversation chain
         self.conversation = LLMConversationChain(prompt=conversation_template, llm=self.agent, memory=self.memory)
 
     def predict(self, user_input):
-        """Generate a response based on the user's input."""
-        return self.conversation.predict(input=user_input)
+        """Generate a response with streaming output."""
+        print("Chatbot: ", end="", flush=True)  # Print Chatbot label before streaming
+        response = self.conversation.predict(input=user_input)
+        print()  # Add a newline after streaming completes
+        return response
 
     def debug_code(self, file_path):
         """Debug the code provided in the file."""
         try:
             with open(file_path, "r") as file:
                 error_file = file.read()
-            query = f"Debug the following code: \n {error_file}"
+            query = f"Debug the following code: \n{error_file}"
             return self.predict(query)
         except FileNotFoundError:
             return "Error: The specified file was not found."
@@ -59,27 +69,32 @@ class Mistral:
             return f"An error occurred while debugging the code: {e}"
 
     def start_chat(self):
-        """Start the chat loop."""
-        print("Chatbot: Hello! How can I assist you today? Press 'B' if you want me to debug, or ask me any other questions!")
+        print("Chatbot: Hello! How can I assist you today?")
+        print("Type 'B' if you want me to debug, or 'exit' to quit.")
+        print("Enter multi-line input starting with 'User:' and end with '~' on a new line.")
 
         while True:
-            query = input("You: ")
+            print("User: ", end="")
+            lines = []
 
-            # if user wants to exit
-            if query == "exit":
+            while True:
+                line = input()
+                if line.strip() == "~":
+                    break
+                lines.append(line)
+
+            user_input = "\n".join(lines).strip()
+
+            if not user_input:
+                continue
+            if user_input.lower() == "exit":
                 print("Chatbot: Exiting - Goodbye!")
                 break
-
-            # if user wants to debug
-            elif query == "B":
-                file_path = r"backend\terminal_output_test_files.py\test_1.txt"  # Update the path as needed
-                response = self.debug_code(file_path)
-                print(f"Chatbot: {response}")
-
+            elif user_input.lower() == "b":
+                file_path = r"backend\terminal_output_test_files.py\test_1.txt"
+                self.debug_code(file_path)
             else:
-                # Generate response for any other input
-                response = self.predict(query)
-                print(f"Chatbot: {response}")
+                self.predict(user_input)
 
 if __name__ == "__main__":
     # Initialize chatbot with role of choice, here 'beginner' by default
