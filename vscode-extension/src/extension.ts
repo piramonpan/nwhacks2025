@@ -68,6 +68,7 @@ async function handleTerminalOutput() {
 		// Error already shown in getTerminalOutput(). Just return here.
 		return;
 	}
+	// TODO: get promt from user input box instead
 	let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
 	if (prompt) {
 		sendToAI(terminalOutput, prompt);
@@ -145,6 +146,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		//webviewView.webview.html = '<p>Hi!</p>';
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
+		// TODO: remove this
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
 				case 'colorSelected':
@@ -205,12 +207,10 @@ class BuddyChat implements vscode.WebviewViewProvider {
 						<p class="text">Sample message</p>
 					</div>
 				</div>
-				<form>
-        			<label for="msg-input">You:</label>
-					<input id="msg-input" type="text" placeholder="Ask a question..." />
-					<button type="submit" onsubmit="console.log('A new message')">></button>
-     			</form>
-			<script src="${jsMainUri}"></script>
+				<label for="msg-input">You:</label>
+				<input id="msg-input" type="text" placeholder="Ask a question..." />
+				<button class="send">Send</button>
+				<script src="${jsMainUri}"></script>
 			</body>
 
 			</html>`;

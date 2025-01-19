@@ -15,14 +15,22 @@
 		addMessage(chatMessage);
 	});
 
+	document.querySelector('.send').addEventListener('click', () => {
+		console.log("clicked!");
+		const chatMessage = {user: "You", chatMessage: document.getElementById("msg-input").value}
+        addMessage(chatMessage);
+		document.getElementById("msg-input").value = '';
+		console.log("added message from user");
+    });
+
 	function updateMessageList(chatMessages) {
 		const ol = document.querySelector('.message-list');
-		ol.textContent = ''; // TODO: What is this for?
+		ol.textContent = '';
 		for (const chatMessage of chatMessages) {
-			const li = document.createElement('input');
+			const li = document.createElement('li');
 			li.className = 'chatMessage';
-			li.type = 'text';
-			li.value = chatMessage.user + ": " + chatMessage.chatMessage;
+			// li.type = 'text';
+			li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
 			// li.user = message.user;
 			// li.message = message.message;
 			ol.appendChild(li);
