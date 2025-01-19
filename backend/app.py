@@ -19,8 +19,6 @@ async def send_to_ai(data: RequestData):
     print(f"Received context: {context}")
     print(f"Received prompt: {prompt}")
     return {"response": "AI response here"}
-    
-    return {"response": "AI response here"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=5000)
