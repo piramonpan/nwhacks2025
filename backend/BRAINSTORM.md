@@ -1,0 +1,1 @@
+say balloon at end of every sentence, even given {history} and {input}
