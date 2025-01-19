@@ -16,11 +16,12 @@ run <code> python pip install -r /path/to/requirements.txt </code>
 
 [place to download models](https://huggingface.co/mradermacher/starchat2-15b-v0.1-i1-GGUF)  (i1-IQ3_S or below recommended for no GPU)
 
-## Step-to-use
+## Step-to-use (dev)
 
 1. Run `backend\app.py`
 2. Open nwhacks2025\vscode-extension in new folder (root)<p>
-3. Open a folder you want the extension to help with 
-4. When file run into error, message chatbot "debug" 
+3. Run the extension by pressing `f5`
+4. Open a folder you want the extension to help with 
+5. When file run into error, message chatbot "debug" 
 
 ![alt text](image.png)
