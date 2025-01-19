@@ -51,7 +51,7 @@ class Mistral:
 
     def predict(self, user_input):
         """Generate a response with streaming output."""
-        print("Chatbot: ", end="", flush=True)  # Print Chatbot label before streaming
+        print("Chatbot: ", end="", flush=True)
         response = self.conversation.predict(input=user_input)
         print()  # Add a newline after streaming completes
         return response
@@ -97,7 +97,6 @@ class Mistral:
                 self.predict(user_input)
 
 if __name__ == "__main__":
-    # Initialize chatbot with role of choice, here 'beginner' by default
     your_api = ""
     chatbot = Mistral(api_key='')
     chatbot.start_chat()
