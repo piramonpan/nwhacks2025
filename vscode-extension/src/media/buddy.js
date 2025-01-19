@@ -24,6 +24,22 @@
 		vscode.postMessage({ message: chatMessage.chatMessage })
 	});
 
+	document.querySelector('.debug').addEventListener('click', () => {
+		console.log("clicked!");
+		vscode.postMessage({ message: "debug" });
+    });
+
+	document.querySelector('.brainstorm').addEventListener('click', () => {
+		console.log("clicked!");
+		vscode.postMessage({ message: "brainstorm" });
+    });
+
+	// document.querySelector('.clear').addEventListener('click', () => {
+	// 	console.log("clicked!");
+	// 	vscode.postMessage({ message: "clear" });
+	// 	vscode.oldState = { chatMessages: [] };
+    // });
+
 	function updateMessageList(chatMessages) {
 		const ol = document.querySelector('.message-list');
 		ol.textContent = '';
@@ -36,6 +52,7 @@
 			}
 			// li.type = 'text';
 			//li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
+			console.log("before setting msg");
 			li.innerHTML = `${chatMessage.user}: ${chatMessage.chatMessage.replace(/\n/g, '<br>')}`;
 			// li.user = message.user;
 			// li.message = message.message;
@@ -46,14 +63,26 @@
 		scrollToBottom();
 
 		// Update the saved state
+		console.log("past scroll func");
 		vscode.setState({ chatMessages: chatMessages });
 	}
 
 	function scrollToBottom() {
-		element = document.getElementById("chat");
+		console.log("scroll func");
+		element = document.getElementsByClassName("message-list")[0];
+		// element = document.getElementById("chat");
+		//element = document.getElementsByClassName("chat")[0];
+		console.log(element);
+		console.log("scroll top: " + element.scrollTop);
+		console.log("scroll height: " + element.scrollHeight);
+
 		setTimeout(() => {
-			element.scrollTop = element.scrollHeight;
-		}, 0); // Ensure the DOM has time to update
+			element.scrollTop = element.scrollHeight - element.clientHeight; //document.getElementsByClassName("userInput")[0].clientHeight;
+		}, 1000); // Ensure the DOM has time to update
+		
+		console.log("scroll top: " + element.scrollTop);
+
+		//element.scrollToBottom;
 	}
 
 	function appendToLastMessage(chatMessageChunk) {

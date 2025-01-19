@@ -16,6 +16,18 @@
       {
         "command": "ai-buddy.helpTerminal",
         "title": "AI Buddy: Help With Terminal"
+      },
+      {
+        "command": "ai-buddy.clear",
+        "title": "AI Buddy: Clear Chat"
+      },
+      {
+        "command": "ai-buddy.debug",
+        "title": "AI Buddy: Enter Debug Mode"
+      },
+      {
+        "command": "ai-buddy.brainstorm",
+        "title": "AI Buddy: Enter Brainstorm Mode"
       }
     ],
     "viewsContainers": {
