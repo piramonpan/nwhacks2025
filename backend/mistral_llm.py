@@ -10,18 +10,30 @@ from langchain.schema import SystemMessage, HumanMessage
 import json
 from langchain_mistralai import ChatMistralAI
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_core.documents import Document
 
 os.environ["PYTHONWARNINGS"] = os.getenv("PYTHONWARNINGS", "ignore")
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+beginner_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/BEGINNER.md"
+loader = UnstructuredMarkdownLoader(beginner_markdown)
+data = loader.load()
+beginner_content = data[0].page_content
+intermediate_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/INTERMEDIATE.md"
+loader2 = UnstructuredMarkdownLoader(intermediate_markdown)
+data2 = loader2.load()
+intermediate_content = data2[0].page_content
+brainstorm_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/BRAINSTORM.md"
+loader = UnstructuredMarkdownLoader(brainstorm_markdown)
+data = loader.load()
+brainstorm_content = data[0].page_content
+
 roles_dict = {
-            "beginner": "You are a helpful debugging teacher. Be excited and encouraging about answers. Don't give the answer. Get line and file where error occurs and what's the error. Explain and ask them questions but give choices.\n\n" +
-                            "Here's an example format: From the traceback you provided, the error occurs at line 29 in your file openai_prompt_test.py. The issue is related to the input variables expected by the ConversationChain. Specifically, the prompt is expecting an empty list [], but it's receiving ['history']. This means that the ConversationChain is receiving input variables that do not match what the prompt template is designed to handle. The prompt seems to expect no input variables ([]), but it is receiving history as an input from the memory, causing a mismatch. Here’s what you can try:\n" +
-                            "Find the definition of conversation_template and see what input variables it expects. One suggestion is to try printing out the input variables at different steps in the code to see where the mismatch occurs. Additionally, you can try using a smaller input array to see if the code runs without any errors, and then gradually increase the size to see where the issue arises. Let me know if this helps or if you need any further assistance. Can you try adjusting the code based on this and see if it resolves the issue?\nDon't have to be exact as the format\n" +
-                            "Current conversation:\n{history}\nHuman: {input}\n",
-            "intermediate": "You are a helpful debugging teacher. Explain in technical terms. Don't give the answer. Ask them to try to write the correct code. Evaluate their answer.\n\n" +
-                             "Current conversation:\n{history}\nHuman: {input}\n",
+            "beginner": beginner_content,
+            "intermediate": intermediate_content,
+            "brainstorm": brainstorm_content,
         }
 class Mistral:
     def __init__(self, api_key, role="beginner"):
@@ -96,3 +108,6 @@ class Mistral:
             else:
                 self.predict(user_input)
 
+if __name__ == "__main__":
+    llm = Mistral(api_key='xk2s9dZPcfGgSDVCo6ALjiOAtmV55vQt')
+    llm.start_chat()
