@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 
 var provider: any = null;
+var mode: string = "debug";
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -41,6 +42,8 @@ async function sendToAI(context: string, prompt: string, type: string) {
         prompt: prompt,
 		type: type
     };
+
+	console.log("IDKWHAT, BUT MODE IS " + type);
 
     try {
         const response = await fetch(endpoint, {
@@ -165,13 +168,15 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		webviewView.webview.onDidReceiveMessage(message => {
+			if (message.message === "debug" || message.message === "brainstorm") {
+				mode = message.message;
+				return;
+			}
 			this.addAIMessage("generating...");
 			(async () => {
 				console.log("Got message from webview");
 				let context = "";
-				// TODO: REMOVE
-				message.type = "debug";
-				switch (message.type) {
+				switch (mode) {
 					case "debug":
 						var fileContents = getActiveFileContents();
 						if (fileContents !== "") {
@@ -183,15 +188,15 @@ class BuddyChat implements vscode.WebviewViewProvider {
 						}
 						break;
 					case "brainstorm":
-						var fileContents = getActiveFileContents();
-						if (fileContents !== "") {
-							context = "-----BEGIN FILE CONTENTS-----\n" + getActiveFileContents() + "\n-----END FILE CONTENTS-----\n";
-						}
-						break;
+						// var fileContents = getActiveFileContents();
+						// if (fileContents !== "") {
+						// 	context = "-----BEGIN FILE CONTENTS-----\n" + getActiveFileContents() + "\n-----END FILE CONTENTS-----\n";
+						// }
+						// break;
 					default:
 						break;
 				}
-				sendToAI(context, message.message, message.type);
+				sendToAI(context, message.message, mode);
 				console.log("sending context:\n" + context);
 				console.log("sending message:\n" + message.message);
 			})();

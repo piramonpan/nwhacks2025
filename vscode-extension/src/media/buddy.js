@@ -12,6 +12,9 @@
 	// Handle messages sent from the extension to the webview
 	window.addEventListener('message', event => {
 		const chatMessage = event.data.message; // The json data that the extension sent
+		if (chatMessage === "debug" || chatMessage === "brainstorm") {
+			return; // handled in extension.ts
+		}
 		addMessage(chatMessage);
 	});
 
