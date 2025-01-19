@@ -153,6 +153,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(message => {
 			// TODO (optional): do this without an extra variable
 			console.log("Got message from webview");
+			this.addAIMessage("...");
 			const afunc = async function () {
 				console.log("In async lala");
 				const terminalOutput = await handleTerminalOutput();
@@ -180,7 +181,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 	public addUserMessage(message: string) {
 		if (this._view) {
 			this._view.show?.(true)
-			this._view.webview.postMessage({ message: { user: "User", chatMessage: message }})
+			this._view.webview.postMessage({ message: { user: "You", chatMessage: message }})
 		}
 	}
 
@@ -216,15 +217,13 @@ class BuddyChat implements vscode.WebviewViewProvider {
 				</div>
 				<div id="chat" class="chat">
 					<ol class="message-list"></ol>
-
-					<div class="message">
-						<img class="pfp" src="${logoUri}" height="20px"/>
-						<p class="text">Sample message</p>
-					</div>
 				</div>
+				<div class="userInput">
 				<label for="msg-input">You:</label>
-				<input id="msg-input" type="text" placeholder="Ask a question..." />
+				<!--<input id="msg-input" type="text" placeholder="Ask a question..." />-->
+				<textarea id="msg-input" wrap="hard" ></textarea>
 				<button class="send">Send</button>
+				</div>
 				<script src="${jsMainUri}"></script>
 			</body>
 

@@ -1,25 +1,81 @@
+.chat {
+    width: 100%;
+}
+
 .chatMessage {
     border-style: solid;
-    border-color: coral;
-    border-width: 2pt;
+    /* border-width: 2pt; */
     border-radius: 5pt;
     list-style-type: none;
+    clear: both;
+    padding: 3pt;
+    max-width: 170pt;
 }
 
 .human {
     float: right;
+    text-align: right;
+    /* border-color: lightblue; */
+    background-color: lightblue;
+    color: black;
 }
 
 .ai {
     float: left;
+    text-align: left;
+    /* border-color: beige; */
+    background-color: beige;
+    color: black;
 }
 
 .pfp, .text {
     float: left;
 }
 
-h1 {
+h1, label {
     font-family: sans-serif;
     font-size: medium;
 }
 
+
+label {
+    margin: 0;
+}
+
+.userInput {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center; /* Vertically center items */
+    gap: 8px; /* Optional: Add some spacing between items */
+    padding: 8px; /* Optional: Add padding for a better look */
+    background-color: slategrey;
+}
+
+#msg-input {
+    overflow: auto;
+    padding: 3pt; /* Add padding for better usability */
+    border: 1px solid #ccc; /* Optional: Add a border */
+    border-radius: 4px; /* Optional: Rounded corners */
+    font-family: sans-serif;
+    font-size: medium;
+}
+
+button.send {
+    font-size: medium;
+    border: none;
+    border-radius: 4px; /* Rounded corners */
+    background-color: lightblue; /* A nice blue color */
+    color: white;
+    cursor: pointer;
+}
+
+button.send:hover {
+    background-color: lightskyblue; /* Darker blue on hover */
+}
+
+.message-list {
+    padding: 0;
+    overflow: auto;
+}

@@ -35,14 +35,25 @@
 				li.className = 'chatMessage ai';
 			}
 			// li.type = 'text';
-			li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
+			//li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
+			li.innerHTML = `${chatMessage.user}: ${chatMessage.chatMessage.replace(/\n/g, '<br>')}`;
 			// li.user = message.user;
 			// li.message = message.message;
 			ol.appendChild(li);
 		}
 
+		// Scroll to the bottom of the chat
+		scrollToBottom();
+
 		// Update the saved state
 		vscode.setState({ chatMessages: chatMessages });
+	}
+
+	function scrollToBottom() {
+		element = document.getElementById("chat");
+		setTimeout(() => {
+			element.scrollTop = element.scrollHeight;
+		}, 0); // Ensure the DOM has time to update
 	}
 
 	function appendToLastMessage(chatMessageChunk) {
