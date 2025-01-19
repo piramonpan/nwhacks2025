@@ -21,7 +21,7 @@
         addMessage(chatMessage);
 		document.getElementById("msg-input").value = '';
 		//console.log("added message from user");
-		vscode.postMessage({ message: 'hello Z!' })
+		vscode.postMessage({ message: chatMessage.chatMessage })
     });
 
 	function updateMessageList(chatMessages) {
@@ -41,9 +41,18 @@
 		vscode.setState({ chatMessages: chatMessages });
 	}
 
+	function appendToLastMessage(chatMessageChunk) {
+		chatMessages[chatMessages.length - 1].chatMessage += chatMessageChunk;
+	}
+
 	function addMessage(chatMessage) {
-		chatMessages.push(chatMessage);
-		updateMessageList(chatMessages);
+		if (chatMessage.user == "-1") {
+			appendToLastMessage(chatMessage.chatMessage);
+			updateMessageList(chatMessages);
+		} else {
+			chatMessages.push(chatMessage);
+			updateMessageList(chatMessages);
+		}
 	}
 }());
 

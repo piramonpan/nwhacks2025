@@ -52,8 +52,44 @@ async function sendToAI(context: string, prompt: string) {
         });
 
         // Parse the response from the Python server
-        const responseData = await response.json();
-        console.log('AI Response:', responseData.response);
+        // const responseData: any = await response.json();
+		const responseData: any = await response;
+		const reader = response.body?.getReader();
+		const decoder = new TextDecoder();
+
+		
+		let isFirstChunk = true;
+		let lastChar = ''; // temporarily store last char
+		if (reader) {
+			provider.addAIMessage('');
+			while (true) {
+				
+			  const { done, value } = await reader.read();
+			  if (done) break;
+
+			  let chunk = decoder.decode(value, { stream: true });
+
+			  if (isFirstChunk) {
+				// Skip the first character of the first chunk
+				chunk = chunk.slice(1);
+				isFirstChunk = false;
+			  }
+
+			  if (!done) {
+				// Save the last character of the current chunk for later
+				lastChar = chunk.slice(-1);
+				chunk = chunk.slice(0, -1); // Exclude the last character from processing
+			  } else {
+				// When the stream ends, don't include the last character
+				chunk = lastChar ? lastChar.slice(0, -1) : chunk;
+			  }
+
+			  provider.appendToLastMessage(chunk); // Call the update function with the processed chunk
+			}
+		} else {
+			// TODO: This doesn't work
+			provider.addAIMessage("Couldn't connect to AI model");
+		}
 
         // // Handle the AI response, e.g., display it in the VS Code UI
         // vscode.window.showInformationMessage(responseData.response);
@@ -71,14 +107,6 @@ async function handleTerminalOutput() {
 		return "";
 	}
 	return terminalOutput;
-
-	// TODO: get promt from user input box instead
-	//let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
-	// if (prompt) {
-	// 	sendToAI(terminalOutput, prompt);
-	// }
-	// provider.addUserMessage(prompt);
-	
 }
 
 async function getLastNTerminalOutput(n: number): Promise<string | null> {
@@ -156,7 +184,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 			const afunc = async function () {
 				console.log("In async lala");
 				const terminalOutput = await handleTerminalOutput();
-				sendToAI(terminalOutput, message);
+				sendToAI(terminalOutput, message.message);
 				console.log("Sent to AI");
 			}
 			afunc();
@@ -167,6 +195,13 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		if (this._view) {
 			this._view.show?.(true)
 			this._view.webview.postMessage({ message : {user: "AI Buddy", chatMessage: message }})
+		}
+	}
+	
+	public appendToLastMessage(message: string) {
+		if (this._view) {
+			this._view.show?.(true)
+			this._view.webview.postMessage({ message : {user: "-1", chatMessage: message }})
 		}
 	}
 
