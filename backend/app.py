@@ -14,11 +14,14 @@ class RequestData(BaseModel):
 @app.post("/send_to_ai")
 async def send_to_ai(data: RequestData):
     print("Connected to Python!!")
+    
+    # context = terminal output
+    # prompt = user input
 
     context = data.context
     prompt = data.prompt
 
-    response = llm.predict(f"{prompt}")
+    response = llm.predict(f"{prompt} the code to debug is: {context}")
     print(response)
     
     # Process the received context and prompt
