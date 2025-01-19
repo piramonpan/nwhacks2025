@@ -47,25 +47,6 @@
           "name": "Buddy Chat"
         }
       ]
-    },
-    "menus": {
-      "view/title": [
-        {
-          "command": "ai-buddy.clear",
-          "when": "view == buddy-chat",
-          "group": "navigation"
-        },
-        {
-          "command": "ai-buddy.debug",
-          "when": "view == buddy-chat",
-          "group": "navigation"
-        },
-        {
-          "command": "ai-buddy.brainstorm",
-          "when": "view == buddy-chat",
-          "group": "navigation"
-        }
-      ]
     }
   },
   "scripts": {
