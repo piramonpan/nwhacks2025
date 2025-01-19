@@ -5,11 +5,13 @@ import uvicorn
 
 app = FastAPI()
 
-llm = Mistral(api_key='xk2s9dZPcfGgSDVCo6ALjiOAtmV55vQt')
+llm = Mistral(api_key='xk2s9dZPcfGgSDVCo6ALjiOAtmV55vQt', role="beginner")
+llm2 = Mistral(api_key='SIvarCb3yaPSn4CEFjFAJTikZDXJK6K0', role='brainstorm')
 
 class RequestData(BaseModel):
     context: str
     prompt: str
+    type: str
 
 @app.post("/send_to_ai")
 async def send_to_ai(data: RequestData):
@@ -21,8 +23,10 @@ async def send_to_ai(data: RequestData):
     context = data.context
     prompt = data.prompt
 
-    response = llm.predict(f"{prompt} the code to debug is: {context}")
-    print(response)
+    if data.type == 'debug':
+        response = llm.predict(f"{prompt} the code to debug is: {context}")
+    else:
+        response = llm2.predict(f"{prompt}")
     
     # Process the received context and prompt
     print(f"Received context: {context}")
