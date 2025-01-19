@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+var provider: any = null;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -10,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "test" is now active!');
 
-	const provider = new BuddyChat(context.extensionUri);
+	provider = new BuddyChat(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(BuddyChat.viewType, provider));
 
 	// The command has been defined in the package.json file
@@ -41,6 +42,8 @@ async function handleTerminalOutput() {
 	if (prompt) {
 		sendToAI(terminalOutput, prompt);
 	}
+	provider.addUserMessage(prompt);
+	
 }
 
 async function getLastNTerminalOutput(n: number): Promise<string | null> {
@@ -91,9 +94,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 	
-	constructor(private readonly _extensionUri: vscode.Uri){
-
-	}
+	constructor(private readonly _extensionUri: vscode.Uri){	}
 
 	public resolveWebviewView(
 		webviewView: vscode.WebviewView,
@@ -114,23 +115,44 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		//webviewView.webview.html = '<p>Hi!</p>';
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		// webviewView.webview.onDidReceiveMessage(data => {
-		// 	switch (data.type) {
-		// 		case 'colorSelected':
-		// 			{
-		// 				vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
-		// 				break;
-		// 			}
-		// 	}
-		// });		
+		webviewView.webview.onDidReceiveMessage(data => {
+			switch (data.type) {
+				case 'colorSelected':
+					{
+						vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
+						break;
+		 			}
+			}
+		});		
+	}
+
+	public addAIMessage(message: string) {
+		if (this._view) {
+			this._view.show?.(true)
+			this._view.webview.postMessage({ user: "AI Buddy", message: message})
+		}
+	}
+
+	public addUserMessage(message: string) {
+		if (this._view) {
+			this._view.show?.(true)
+			this._view.webview.postMessage({ message: { user: "User", message: message }})
+		}
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const jsMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.js'));
+		// const jsMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.js'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.css'));
 		const logoUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'github-inverted-icon.png'));
 
+		//const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+		const jsMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.js'));
+		// Do the same for the stylesheet.
+		//const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
+		//const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
+		//const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+	
 		return `<!DOCTYPE html>
 			<html lang="en">
 
