@@ -94,7 +94,7 @@
 
 	function addMessage(chatMessage) {
 		if (chatMessage.user == "replace") {
-			chatMessages[chatMessages.length - 1].chatMessage += chatMessage.chatMessage;
+			chatMessages[chatMessages.length - 1].chatMessage = chatMessage.chatMessage;
 			updateMessageList(chatMessages);
 		} else if (chatMessage.user == "-1") {
 			appendToLastMessage(chatMessage.chatMessage);
