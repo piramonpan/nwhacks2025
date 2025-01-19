@@ -20,9 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-async function sendToAI(text: string) {
+async function sendToAI(context: string, prompt: string) {
 	// TODO: Send some data to the AI backend.
-	console.log('(mock) AI received: \'\'\'\n' + text + "\n\'\'\'");
+	console.log('(mock) AI received prompt \"' + prompt
+				+ '\" with context:\n\'\'\'\n' + context + "\n\'\'\'");
 }
 
 async function handleTerminalOutput() {
@@ -32,7 +33,10 @@ async function handleTerminalOutput() {
 		// Error already shown in getTerminalOutput(). Just return here.
 		return;
 	}
-	sendToAI(terminalOutput);
+	let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
+	if (prompt) {
+		sendToAI(terminalOutput, prompt);
+	}
 }
 
 async function getLastNTerminalOutput(n: number): Promise<string | null> {
