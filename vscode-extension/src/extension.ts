@@ -56,7 +56,7 @@ async function sendToAI(context: string, prompt: string, type: string) {
 		const decoder = new TextDecoder();
 
 		if (reader) {
-			provider.addAIMessage('');
+			provider.replaceLastMessage('');
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
@@ -64,7 +64,7 @@ async function sendToAI(context: string, prompt: string, type: string) {
 				provider.appendToLastMessage(chunk);
 			}
 		} else {
-			provider.addAIMessage("Couldn't connect to AI model");
+			provider.replaceLastMessage("Couldn't connect to AI model");
 		}
     } catch (error) {
         console.error('Error sending data to AI:', error);
@@ -165,6 +165,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		webviewView.webview.onDidReceiveMessage(message => {
+			this.addAIMessage("generating...");
 			(async () => {
 				console.log("Got message from webview");
 				let context = "";
@@ -215,6 +216,13 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		if (this._view) {
 			this._view.show?.(true)
 			this._view.webview.postMessage({ message: { user: "You", chatMessage: message }})
+		}
+	}
+
+	public replaceLastMessage(message: string) {
+		if (this._view) {
+			this._view.show?.(true)
+			this._view.webview.postMessage({ message: { user: "replace", chatMessage: message }})
 		}
 	}
 
