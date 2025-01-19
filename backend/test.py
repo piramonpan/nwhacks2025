@@ -31,7 +31,8 @@ llm = LlamaCpp(
     n_batch=1024,
     temperature=0.8,
     max_tokens=2048,
-    n_context=4096,
+    context_length=2048,
+    n_ctx=4096,
     streaming=True,
     callbacks=[file_streaming_callback]
 )
