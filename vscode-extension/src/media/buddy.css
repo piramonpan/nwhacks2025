@@ -1,0 +1,7 @@
+.message{
+    display: inline-block;
+}
+
+.pfp, .text {
+    float: left;
+}
