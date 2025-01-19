@@ -1,7 +1,7 @@
 # nwhacks2025
 
 ## Developers 
-Zoe __, Karanveer, Jun He, Pan Tisapramotkul
+Zoe van de Vegte, Karanveer Buttar, Jun He Cui, Pan Tisapramotkul
 
 ## Description
 <p> An VSExtension chatbot that acts as a teacher that help automatically debug error codes from terminal output. It will explain and guide you to the right answer. Learn while you debug! </p>
