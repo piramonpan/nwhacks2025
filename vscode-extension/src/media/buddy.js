@@ -16,11 +16,12 @@
 	});
 
 	document.querySelector('.send').addEventListener('click', () => {
-		console.log("clicked!");
+		//console.log("clicked!");
 		const chatMessage = {user: "You", chatMessage: document.getElementById("msg-input").value}
         addMessage(chatMessage);
 		document.getElementById("msg-input").value = '';
-		console.log("added message from user");
+		//console.log("added message from user");
+		vscode.postMessage({ message: 'hello Z!' })
     });
 
 	function updateMessageList(chatMessages) {

@@ -24,6 +24,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
+
+
 async function sendToAI(context: string, prompt: string) {
 	// // TODO: Send some data to the AI backend.
 	// console.log('(mock) AI received prompt \"' + prompt
@@ -66,14 +68,16 @@ async function handleTerminalOutput() {
 	let terminalOutput = await getLastNTerminalOutput(30);
 	if (terminalOutput === null) {
 		// Error already shown in getTerminalOutput(). Just return here.
-		return;
+		return "";
 	}
+	return terminalOutput;
+
 	// TODO: get promt from user input box instead
-	let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
-	if (prompt) {
-		sendToAI(terminalOutput, prompt);
-	}
-	provider.addUserMessage(prompt);
+	//let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
+	// if (prompt) {
+	// 	sendToAI(terminalOutput, prompt);
+	// }
+	// provider.addUserMessage(prompt);
 	
 }
 
@@ -146,15 +150,16 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		//webviewView.webview.html = '<p>Hi!</p>';
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		// TODO: remove this
-		webviewView.webview.onDidReceiveMessage(data => {
-			switch (data.type) {
-				case 'colorSelected':
-					{
-						vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
-						break;
-		 			}
+		webviewView.webview.onDidReceiveMessage(message => {
+			// TODO: do this without an unused variable
+			console.log("Got message from webview");
+			const lala = async function () {
+				console.log("In async lala");
+				const terminalOutput = await handleTerminalOutput();
+				sendToAI(terminalOutput, message);
+				console.log("Sent to AI");
 			}
+			lala();
 		});		
 	}
 
@@ -185,6 +190,8 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		//const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		//const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 	
+		// TODO: put security nonce back in
+		// TODO: make enter send messages
 		return `<!DOCTYPE html>
 			<html lang="en">
 
