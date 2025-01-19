@@ -13,32 +13,66 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('ai-buddy.helloWorld', async () => {
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from test!');
-
-		const terminal = vscode.window.activeTerminal;
-		if (!terminal) {
-			vscode.window.showErrorMessage('No active terminal found.');
-			return;
-		}
-
-		// Select all in the terminal and copy to clipboard
-		await vscode.commands.executeCommand('workbench.action.terminal.selectAll');
-		await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
-
-		// Access clipboard content
-		const selectedText = await vscode.env.clipboard.readText();
-
-		// Clear the terminal selection
-		await vscode.commands.executeCommand('workbench.action.terminal.clearSelection');
-
-		// Display the captured text (or use it elsewhere in your extension)
-		console.log('Captured Terminal Output:', selectedText);
-		vscode.window.showInformationMessage(`Captured Terminal Output:\n${selectedText}`);
+	const disposable = vscode.commands.registerCommand('ai-buddy.helpTerminal', async () => {
+		handleTerminalOutput();
 	});
 
 	context.subscriptions.push(disposable);
+}
+
+async function sendToAI(text: string) {
+	// TODO: Send some data to the AI backend.
+	console.log('(mock) AI received: \'\'\'\n' + text + "\n\'\'\'");
+}
+
+async function handleTerminalOutput() {
+	// Grabs output from the terminal and sends it to the AI
+	let terminalOutput = await getLastNTerminalOutput(30);
+	if (terminalOutput === null) {
+		// Error already shown in getTerminalOutput(). Just return here.
+		return;
+	}
+	sendToAI(terminalOutput);
+}
+
+async function getLastNTerminalOutput(n: number): Promise<string | null> {
+	let output = await getTerminalOutput();
+	if (output === null) {
+		// Error already shown in getTerminalOutput(). Just return here.
+		return null
+	}
+	// Get at most n lines
+	let truncatedOutput = output.split('\n').splice(-n).join('\n');
+	return truncatedOutput;
+}
+
+async function getTerminalOutput(): Promise<string | null> {
+	const terminal = vscode.window.activeTerminal;
+	if (!terminal) {
+		vscode.window.showErrorMessage('No terminal is currently active.');
+		return null;
+	}
+
+	// Store original clipboard data to avoid clobbering too bad
+	const originalClipboard = await vscode.env.clipboard.readText();
+
+	// Logic to capture terminal output: https://github.com/mikekwright/vscode-terminal-capture
+	
+	// Select all in the terminal and copy to clipboard
+	await vscode.commands.executeCommand('workbench.action.terminal.selectAll');
+	await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
+
+	// Access clipboard content
+	const selectedText = await vscode.env.clipboard.readText();
+
+	// Clear the terminal selection
+	await vscode.commands.executeCommand('workbench.action.terminal.clearSelection');
+
+	// Restore clipboard to original text
+	vscode.env.clipboard.writeText(originalClipboard);
+
+	// Display the captured text (or use it elsewhere in your extension)
+	return selectedText;
 }
 
 // This method is called when your extension is deactivated

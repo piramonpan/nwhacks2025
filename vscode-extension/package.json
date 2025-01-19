@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "ai-buddy.helloWorld",
-        "title": "Hello World"
+        "command": "ai-buddy.helpTerminal",
+        "title": "AI Buddy: Help With Terminal"
       }
     ]
   },
