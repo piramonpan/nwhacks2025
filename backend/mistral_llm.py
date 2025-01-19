@@ -96,7 +96,3 @@ class Mistral:
             else:
                 self.predict(user_input)
 
-if __name__ == "__main__":
-    your_api = ""
-    chatbot = Mistral(api_key='')
-    chatbot.start_chat()

@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from mistral_llm import Mistral
 import uvicorn
 
 app = FastAPI()
+
+llm = Mistral(api_key='xk2s9dZPcfGgSDVCo6ALjiOAtmV55vQt')
 
 class RequestData(BaseModel):
     context: str
@@ -14,11 +17,14 @@ async def send_to_ai(data: RequestData):
 
     context = data.context
     prompt = data.prompt
+
+    response = llm.predict(f"{prompt}")
+    print(response)
     
     # Process the received context and prompt
     print(f"Received context: {context}")
     print(f"Received prompt: {prompt}")
-    return {"response": "AI response here"}
+    return {f"response: {response}"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=5000)
