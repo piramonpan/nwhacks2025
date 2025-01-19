@@ -10,8 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "test" is now active!');
 
-	vscode.commands.executeCommand('workbench.view.extension.buddy');
-
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -29,6 +27,7 @@ async function sendToAI(context: string, prompt: string) {
 }
 
 async function handleTerminalOutput() {
+	vscode.commands.executeCommand('workbench.view.extension.buddy');
 	// Grabs output from the terminal and sends it to the AI
 	let terminalOutput = await getLastNTerminalOutput(30);
 	if (terminalOutput === null) {
