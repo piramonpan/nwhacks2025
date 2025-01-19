@@ -1,0 +1,21 @@
+Check the render method of `App`.
+
+    at createFiberFromTypeAndProps (react-dom.development.js:25652:21)
+    at createFiberFromElement (react-dom.development.js:25684:15)
+    at reconcileSingleElement (react-dom.development.js:14969:22)
+    at reconcileChildFibers (react-dom.development.js:15037:35)
+    at reconcileChildren (react-dom.development.js:17829:28)
+    at updateHostComponent (react-dom.development.js:18325:3)
+    at beginWork (react-dom.development.js:20162:5)
+    at beginWork$1 (react-dom.development.js:25733:15)
+    at performUnitOfWork (react-dom.development.js:24560:12)
+    at workLoopSync (react-dom.development.js:24536:22)
+
+The above error occurred in the <Header> component:
+    at Header (http://localhost:3000/static/js/main.chunk.js:12:25)
+    at App (http://localhost:3000/static/js/main.chunk.js:5:23)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, App.
+
+Error boundary stack trace:
+Error: Uncaught [Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined.]
