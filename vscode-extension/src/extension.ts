@@ -156,7 +156,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 			const afunc = async function () {
 				console.log("In async lala");
 				const terminalOutput = await handleTerminalOutput();
-				sendToAI(terminalOutput, message);
+				sendToAI(terminalOutput, message.message);
 				console.log("Sent to AI");
 			}
 			afunc();
@@ -205,6 +205,7 @@ class BuddyChat implements vscode.WebviewViewProvider {
 
 			<body>
 				<div class="heading">
+				<h1>Chat with your code buddy</h1>
 				</div>
 				<div id="chat" class="chat">
 					<ol class="message-list"></ol>

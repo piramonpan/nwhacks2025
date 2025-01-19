@@ -29,7 +29,11 @@
 		ol.textContent = '';
 		for (const chatMessage of chatMessages) {
 			const li = document.createElement('li');
-			li.className = 'chatMessage';
+			if (chatMessage.user == 'You'){
+				li.className = 'chatMessage human';
+			} else {
+				li.className = 'chatMessage ai';
+			}
 			// li.type = 'text';
 			li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
 			// li.user = message.user;

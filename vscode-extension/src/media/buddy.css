@@ -1,7 +1,25 @@
-.message{
-    display: inline-block;
+.chatMessage {
+    border-style: solid;
+    border-color: coral;
+    border-width: 2pt;
+    border-radius: 5pt;
+    list-style-type: none;
+}
+
+.human {
+    float: right;
+}
+
+.ai {
+    float: left;
 }
 
 .pfp, .text {
     float: left;
 }
+
+h1 {
+    font-family: sans-serif;
+    font-size: medium;
+}
+
