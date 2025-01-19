@@ -17,7 +17,24 @@
         "command": "ai-buddy.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "buddy",
+          "title": "AI Buddy",
+          "icon": ""
+        }
+      ]
+    },
+    "views": {
+      "buddy": [
+        {
+          "id": "buddy-chat",
+          "name": "Buddy Chat"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

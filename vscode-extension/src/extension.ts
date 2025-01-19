@@ -10,35 +10,38 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "test" is now active!');
 
+	vscode.commands.executeCommand('workbench.view.extension.buddy');
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	const disposable = vscode.commands.registerCommand('ai-buddy.helloWorld', async () => {
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from test!');
-
-		const terminal = vscode.window.activeTerminal;
-		if (!terminal) {
-			vscode.window.showErrorMessage('No active terminal found.');
-			return;
-		}
-
-		// Select all in the terminal and copy to clipboard
-		await vscode.commands.executeCommand('workbench.action.terminal.selectAll');
-		await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
-
-		// Access clipboard content
-		const selectedText = await vscode.env.clipboard.readText();
-
-		// Clear the terminal selection
-		await vscode.commands.executeCommand('workbench.action.terminal.clearSelection');
-
-		// Display the captured text (or use it elsewhere in your extension)
-		console.log('Captured Terminal Output:', selectedText);
-		vscode.window.showInformationMessage(`Captured Terminal Output:\n${selectedText}`);
+		copyTerminal();
 	});
 
 	context.subscriptions.push(disposable);
+}
+
+async function copyTerminal() {
+	const terminal = vscode.window.activeTerminal;
+	if (!terminal) {
+		vscode.window.showErrorMessage('No active terminal found.');
+		return;
+	}
+
+	// Select all in the terminal and copy to clipboard
+	await vscode.commands.executeCommand('workbench.action.terminal.selectAll');
+	await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
+
+	// Access clipboard content
+	const selectedText = await vscode.env.clipboard.readText();
+
+	// Clear the terminal selection
+	await vscode.commands.executeCommand('workbench.action.terminal.clearSelection');
+
+	// Display the captured text (or use it elsewhere in your extension)
+	console.log('Captured Terminal Output:', selectedText);
+	vscode.window.showInformationMessage(`Captured Terminal Output:\n${selectedText}`);
 }
 
 // This method is called when your extension is deactivated
