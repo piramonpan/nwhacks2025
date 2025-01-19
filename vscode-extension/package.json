@@ -30,6 +30,7 @@
     "views": {
       "buddy": [
         {
+          "type": "webview",
           "id": "buddy-chat",
           "name": "Buddy Chat"
         }
