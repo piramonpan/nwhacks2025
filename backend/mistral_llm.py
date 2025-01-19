@@ -17,15 +17,21 @@ os.environ["PYTHONWARNINGS"] = os.getenv("PYTHONWARNINGS", "ignore")
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-beginner_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/BEGINNER.md"
+dirname = os.path.dirname(__file__)
+# filename = os.path.join(dirname, 'relative/path/to/file/you/want')
+
+#beginner_markdown = "/Users/vande/Documents/Programming/nwhacks2025/backend/BEGINNER.md"
+beginner_markdown = os.path.join(dirname, 'BEGINNER.md')
 loader = UnstructuredMarkdownLoader(beginner_markdown)
 data = loader.load()
 beginner_content = data[0].page_content
-intermediate_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/INTERMEDIATE.md"
+#intermediate_markdown = "/Users/vande/Documents/Programming/nwhacks2025/backend/INTERMEDIATE.md"
+intermediate_markdown = os.path.join(dirname, 'INTERMEDIATE.md')
 loader2 = UnstructuredMarkdownLoader(intermediate_markdown)
 data2 = loader2.load()
 intermediate_content = data2[0].page_content
-brainstorm_markdown = "/Users/junhe/Desktop/nwhacks2025/backend/BRAINSTORM.md"
+#brainstorm_markdown = "/Users/vande/Documents/Programming/nwhacks2025/backend/BRAINSTORM.md"
+brainstorm_markdown = os.path.join(dirname, 'BRAINSTORM.md')
 loader = UnstructuredMarkdownLoader(brainstorm_markdown)
 data = loader.load()
 brainstorm_content = data[0].page_content

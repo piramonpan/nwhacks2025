@@ -151,15 +151,15 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		webviewView.webview.onDidReceiveMessage(message => {
-			// TODO: do this without an unused variable
+			// TODO (optional): do this without an extra variable
 			console.log("Got message from webview");
-			const lala = async function () {
+			const afunc = async function () {
 				console.log("In async lala");
 				const terminalOutput = await handleTerminalOutput();
 				sendToAI(terminalOutput, message);
 				console.log("Sent to AI");
 			}
-			lala();
+			afunc();
 		});		
 	}
 
