@@ -127,33 +127,40 @@ class BuddyChat implements vscode.WebviewViewProvider {
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+		const jsMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.js'));
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'buddy.css'));
+		const logoUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'media', 'github-inverted-icon.png'));
 
-		// Do the same for the stylesheet.
-		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
-	
 		return `<!DOCTYPE html>
 			<html lang="en">
+
 			<head>
 				<meta charset="UTF-8">
-
-				<!--
-					Use a content security policy to only allow loading styles from our extension directory,
-					and only allow scripts that have a specific nonce.
-					(See the 'webview-sample' extension sample for img-src content security policy examples)
-				-->
-
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+				<link href="${styleMainUri}" rel="stylesheet">
 				
-
 				<title>AI Buddy</title>
 			</head>
+
 			<body>
-				<p>Hi</p>
+				<div class="heading">
+				</div>
+				<div id="chat" class="chat">
+					<ol class="message-list"></ol>
+
+					<div class="message">
+						<img class="pfp" src="${logoUri}" height="20px"/>
+						<p class="text">Sample message</p>
+					</div>
+				</div>
+				<form>
+        			<label for="msg-input">You:</label>
+					<input id="msg-input" type="text" placeholder="Ask a question..." />
+					<button type="submit" onsubmit="console.log('A new message')">></button>
+     			</form>
+			<script src="${jsMainUri}"></script>
 			</body>
+
 			</html>`;
 	}
 }
