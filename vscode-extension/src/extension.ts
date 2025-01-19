@@ -42,7 +42,6 @@ async function sendToAI(context: string, prompt: string) {
     };
 
     try {
-        // Send a POST request to the Python backend
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -51,48 +50,21 @@ async function sendToAI(context: string, prompt: string) {
             body: JSON.stringify(data)
         });
 
-        // Parse the response from the Python server
-        // const responseData: any = await response.json();
 		const responseData: any = await response;
-		const reader = response.body?.getReader();
+		const reader = responseData.body?.getReader();
 		const decoder = new TextDecoder();
 
-		
-		let isFirstChunk = true;
-		let lastChar = ''; // temporarily store last char
 		if (reader) {
 			provider.addAIMessage('');
 			while (true) {
-				
-			  const { done, value } = await reader.read();
-			  if (done) break;
-
-			  let chunk = decoder.decode(value, { stream: true });
-
-			  if (isFirstChunk) {
-				// Skip the first character of the first chunk
-				chunk = chunk.slice(1);
-				isFirstChunk = false;
-			  }
-
-			  if (!done) {
-				// Save the last character of the current chunk for later
-				lastChar = chunk.slice(-1);
-				chunk = chunk.slice(0, -1); // Exclude the last character from processing
-			  } else {
-				// When the stream ends, don't include the last character
-				chunk = lastChar ? lastChar.slice(0, -1) : chunk;
-			  }
-
-			  provider.appendToLastMessage(chunk); // Call the update function with the processed chunk
+				const { done, value } = await reader.read();
+				if (done) break;
+				let chunk = JSON.parse(decoder.decode(value, { stream: true }));
+				provider.appendToLastMessage(chunk);
 			}
 		} else {
-			// TODO: This doesn't work
 			provider.addAIMessage("Couldn't connect to AI model");
 		}
-
-        // // Handle the AI response, e.g., display it in the VS Code UI
-        // vscode.window.showInformationMessage(responseData.response);
     } catch (error) {
         console.error('Error sending data to AI:', error);
     }
