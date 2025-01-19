@@ -8,20 +8,21 @@ from langchain.memory import ConversationBufferMemory
 from datetime import datetime
 from langchain.schema import SystemMessage, HumanMessage
 import json
+from langchain_mistralai import ChatMistralAI
 
 os.environ["PYTHONWARNINGS"] = os.getenv("PYTHONWARNINGS", "ignore")
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 roles_dict = {
-            "beginner": "You are a helpful debugging teacher. Don't give the answer. Get line and file where error occurs and what's the error. Explain and ask them questions but give choices.\n\n" +
+            "beginner": "You are a helpful debugging teacher. Be excited and encouraging about answers. Don't give the answer. Get line and file where error occurs and what's the error. Explain and ask them questions but give choices.\n\n" +
                             "Here's an example format: From the traceback you provided, the error occurs at line 29 in your file openai_prompt_test.py. The issue is related to the input variables expected by the ConversationChain. Specifically, the prompt is expecting an empty list [], but it's receiving ['history']. This means that the ConversationChain is receiving input variables that do not match what the prompt template is designed to handle. The prompt seems to expect no input variables ([]), but it is receiving history as an input from the memory, causing a mismatch. Here’s what you can try:\n" +
                             "Find the definition of conversation_template and see what input variables it expects. One suggestion is to try printing out the input variables at different steps in the code to see where the mismatch occurs. Additionally, you can try using a smaller input array to see if the code runs without any errors, and then gradually increase the size to see where the issue arises. Let me know if this helps or if you need any further assistance. Can you try adjusting the code based on this and see if it resolves the issue?\nDon't have to be exact as the format\n" +
                             "Current conversation:\n{history}\nHuman: {input}\n",
             "intermediate": "You are a helpful debugging teacher. Explain in technical terms. Don't give the answer. Ask them to try to write the correct code. Evaluate their answer.\n\n" +
-                            "Current conversation:\n{history}\nHuman: {input}\n",
+                             "Current conversation:\n{history}\nHuman: {input}\n",
         }
-class OpenAIChat:
+class Mistral:
     def __init__(self, api_key, role="beginner"):
         # Setup environment and warnings
         os.environ["PYTHONWARNINGS"] = os.getenv("PYTHONWARNINGS", "ignore")
@@ -32,7 +33,7 @@ class OpenAIChat:
         self.role_templates =roles_dict
 
         self.role = role
-        self.agent = OpenAI(api_key=api_key)  # Use your API key here
+        self.agent = ChatMistralAI(model="mistral-large-latest", api_key=api_key)  # Use your API key here
         self.memory = ConversationBufferMemory()
 
         # Create the conversation prompt template
@@ -83,5 +84,5 @@ class OpenAIChat:
 if __name__ == "__main__":
     # Initialize chatbot with role of choice, here 'beginner' by default
     your_api = ""
-    chatbot = OpenAIChat(api_key=your_api)
+    chatbot = Mistral(api_key='')
     chatbot.start_chat()
