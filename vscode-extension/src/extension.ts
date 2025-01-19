@@ -13,10 +13,14 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('test.helloWorld', async () => {
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from test!');
+	const disposable = vscode.commands.registerCommand('ai-buddy.helloWorld', async () => {
+		copyTerminal();
+	});
 
+	context.subscriptions.push(disposable);
+}
+
+async function copyTerminal() {
 		const terminal = vscode.window.activeTerminal;
 		if (!terminal) {
 			vscode.window.showErrorMessage('No active terminal found.');
@@ -36,9 +40,6 @@ export function activate(context: vscode.ExtensionContext) {
 		// Display the captured text (or use it elsewhere in your extension)
 		console.log('Captured Terminal Output:', selectedText);
 		vscode.window.showInformationMessage(`Captured Terminal Output:\n${selectedText}`);
-	});
-
-	context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
