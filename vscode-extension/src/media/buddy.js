@@ -3,40 +3,39 @@
 (function () {
 	const vscode = acquireVsCodeApi();
 
-	const oldState = vscode.getState() || { messages: [] };
+	const oldState =  vscode.getState() || { chatMessages: [] };
 
-	let messages = oldState.messages;
+	let chatMessages = oldState.chatMessages;
 
-	updateMessageList(messages);
+	updateMessageList(chatMessages);
 
 	// Handle messages sent from the extension to the webview
 	window.addEventListener('message', event => {
-		const message = event.data.message; // The json data that the extension sent
-		addMessage(message);
+		const chatMessage = event.data.message; // The json data that the extension sent
+		addMessage(chatMessage);
 	});
 
-	function updateMessageList(messages) {
+	function updateMessageList(chatMessages) {
 		const ol = document.querySelector('.message-list');
 		ol.textContent = ''; // TODO: What is this for?
-		for (const message of messages) {
+		for (const chatMessage of chatMessages) {
 			const li = document.createElement('input');
-			li.className = 'message';
+			li.className = 'chatMessage';
 			li.type = 'text';
-			li.value = message.user + ": " + message.message;
+			li.value = chatMessage.user + ": " + chatMessage.chatMessage;
 			// li.user = message.user;
 			// li.message = message.message;
 			ol.appendChild(li);
 		}
 
 		// Update the saved state
-		vscode.setState({ messages: messages });
+		vscode.setState({ chatMessages: chatMessages });
 	}
 
-	function addMessage(message) {
-		messages.push({ user: message.user, message: message.message});
-		updateMessageList(messages);
+	function addMessage(chatMessage) {
+		chatMessages.push(chatMessage);
+		updateMessageList(chatMessages);
 	}
-
 }());
 
 

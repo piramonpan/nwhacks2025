@@ -129,14 +129,14 @@ class BuddyChat implements vscode.WebviewViewProvider {
 	public addAIMessage(message: string) {
 		if (this._view) {
 			this._view.show?.(true)
-			this._view.webview.postMessage({ user: "AI Buddy", message: message})
+			this._view.webview.postMessage({ message : {user: "AI Buddy", chatMessage: message }})
 		}
 	}
 
 	public addUserMessage(message: string) {
 		if (this._view) {
 			this._view.show?.(true)
-			this._view.webview.postMessage({ message: { user: "User", message: message }})
+			this._view.webview.postMessage({ message: { user: "User", chatMessage: message }})
 		}
 	}
 
