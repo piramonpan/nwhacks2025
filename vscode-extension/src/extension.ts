@@ -25,9 +25,39 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 async function sendToAI(context: string, prompt: string) {
-	// TODO: Send some data to the AI backend.
-	console.log('(mock) AI received prompt \"' + prompt
-				+ '\" with context:\n\'\'\'\n' + context + "\n\'\'\'");
+	// // TODO: Send some data to the AI backend.
+	// console.log('(mock) AI received prompt \"' + prompt
+	// 			+ '\" with context:\n\'\'\'\n' + context + "\n\'\'\'");
+	// Endpoint of your Python server (can be local or remote)
+	
+	console.log("hello from typescript");
+    const endpoint = 'http://localhost:5000/send_to_ai';  // Replace with the actual URL if needed
+
+    // Prepare the data to send
+    const data = {
+        context: context,
+        prompt: prompt
+    };
+
+    try {
+        // Send a POST request to the Python backend
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        // Parse the response from the Python server
+        const responseData = await response.json();
+        console.log('AI Response:', responseData.response);
+
+        // // Handle the AI response, e.g., display it in the VS Code UI
+        // vscode.window.showInformationMessage(responseData.response);
+    } catch (error) {
+        console.error('Error sending data to AI:', error);
+    }
 }
 
 async function handleTerminalOutput() {
