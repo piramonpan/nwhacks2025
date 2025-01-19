@@ -26,13 +26,11 @@ memory = ConversationBufferMemory()
 
 # LlamaCpp model configuration
 llm = LlamaCpp(
-    model_path='/Users/junhe/Desktop/nwhacks2025/backend/model/meta.gguf',
+    model_path='/Users/junhe/Desktop/nwhacks2025/backend/model/mistral-7b-v0.1.Q5_K_M.gguf',
     n_gpu_layers=-1,
     n_batch=1024,
     temperature=0.8,
-    max_tokens=2048,
-    context_length=2048,
-    n_ctx=4096,
+    n_ctx=2048,
     streaming=True,
     callbacks=[file_streaming_callback]
 )
