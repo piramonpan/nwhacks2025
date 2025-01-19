@@ -129,31 +129,29 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
-		// Do the same for the stylesheet.
-		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
-	
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'styling', 'buddy.css'));
+		const logoUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'src', 'styling', 'github-inverted-icon.png'));
+
 		return `<!DOCTYPE html>
 			<html lang="en">
+
 			<head>
 				<meta charset="UTF-8">
-
-				<!--
-					Use a content security policy to only allow loading styles from our extension directory,
-					and only allow scripts that have a specific nonce.
-					(See the 'webview-sample' extension sample for img-src content security policy examples)
-				-->
-
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				
-
+				<link href="${styleMainUri}" rel="stylesheet">
 				<title>AI Buddy</title>
 			</head>
+
 			<body>
-				<p>Hi</p>
+				<div class="heading"></div>
+				<div class="chat">
+					<div class="message">
+						<img class="pfp" src="${logoUri}" height="20px"/>
+						<p class="text">Sample message</p>
+					</div>
+					</div>
 			</body>
+
 			</html>`;
 	}
 }
