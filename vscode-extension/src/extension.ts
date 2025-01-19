@@ -42,7 +42,6 @@ async function sendToAI(context: string, prompt: string) {
     };
 
     try {
-        // Send a POST request to the Python backend
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -51,12 +50,21 @@ async function sendToAI(context: string, prompt: string) {
             body: JSON.stringify(data)
         });
 
-        // Parse the response from the Python server
-        const responseData = await response.json();
-        console.log('AI Response:', responseData.response);
+		const responseData: any = await response;
+		const reader = responseData.body?.getReader();
+		const decoder = new TextDecoder();
 
-        // // Handle the AI response, e.g., display it in the VS Code UI
-        // vscode.window.showInformationMessage(responseData.response);
+		if (reader) {
+			provider.addAIMessage('');
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				let chunk = JSON.parse(decoder.decode(value, { stream: true }));
+				provider.appendToLastMessage(chunk);
+			}
+		} else {
+			provider.addAIMessage("Couldn't connect to AI model");
+		}
     } catch (error) {
         console.error('Error sending data to AI:', error);
     }
@@ -71,14 +79,6 @@ async function handleTerminalOutput() {
 		return "";
 	}
 	return terminalOutput;
-
-	// TODO: get promt from user input box instead
-	//let prompt = await vscode.window.showInputBox({prompt: "Question about terminal output", placeHolder: "Prompt to AI"});
-	// if (prompt) {
-	// 	sendToAI(terminalOutput, prompt);
-	// }
-	// provider.addUserMessage(prompt);
-	
 }
 
 async function getLastNTerminalOutput(n: number): Promise<string | null> {
@@ -167,6 +167,13 @@ class BuddyChat implements vscode.WebviewViewProvider {
 		if (this._view) {
 			this._view.show?.(true)
 			this._view.webview.postMessage({ message : {user: "AI Buddy", chatMessage: message }})
+		}
+	}
+	
+	public appendToLastMessage(message: string) {
+		if (this._view) {
+			this._view.show?.(true)
+			this._view.webview.postMessage({ message : {user: "-1", chatMessage: message }})
 		}
 	}
 
