@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "c:\Users\piram\Documents\4th Year Term 2\hackathon\nwhacks2025\backend\openai_prompt_test.py", line 29, in <module>
+    conversation = ConversationChain(prompt=conversation_template, llm=agent, memory=memory)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\_api\deprecation.py", line 216, in warn_if_direct_instance
+    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\_api\deprecation.py", line 216, in warn_if_direct_instance
+    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\load\serializable.py", line 125, in __init__  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\_api\deprecation.py", line 216, in warn_if_direct_instance
+    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\_api\deprecation.py", line 216, in warn_if_direct_instance
+    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\load\serializable.py", line 125, in __init__  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\_api\deprecation.py", line 216, in warn_if_direct_instance
+    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\load\serializable.py", line 125, in __init__    return wrapped(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\load\serializable.py", line 125, in __init__  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\langchain_core\load\serializable.py", line 125, in __init__    super().__init__(*args, **kwargs)
+  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ConversationChain
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the nor  File "C:\Users\piram\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ConversationChain
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the nor                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ConversationChain
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the norpydantic_core._pydantic_core.ValidationError: 1 validation error for ConversationChain
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the normal input key. [type=value_error, input_value={'prompt': PromptTemplate...geHistory(messages=[]))}, input_type=dict]

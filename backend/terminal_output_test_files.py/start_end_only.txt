@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "c:\Users\piram\Documents\4th Year Term 2\hackathon\nwhacks2025\backend\openai_prompt_test.py", line 29, in <module>
+    conversation = ConversationChain(prompt=conversation_template, llm=agent, memory=memory)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the norpydantic_core._pydantic_core.ValidationError: 1 validation error for ConversationChain
+  Value error, Got unexpected prompt input variables. The prompt expects [], but got ['history'] as inputs from memory, and input as the normal input key. [type=value_error, input_value={'prompt': PromptTemplate...geHistory(messages=[]))}, input_type=dict]
