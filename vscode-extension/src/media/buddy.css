@@ -1,5 +1,6 @@
 .chat {
     width: 100%;
+    height: 100%;
 }
 
 .chatMessage {
@@ -9,7 +10,7 @@
     list-style-type: none;
     clear: both;
     padding: 3pt;
-    max-width: 170pt;
+    max-width: 200pt;
 }
 
 .human {
@@ -78,4 +79,5 @@ button.send:hover {
 .message-list {
     padding: 0;
     overflow: auto;
+    height: 100vh;
 }

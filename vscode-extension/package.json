@@ -16,6 +16,18 @@
       {
         "command": "ai-buddy.helpTerminal",
         "title": "AI Buddy: Help With Terminal"
+      },
+      {
+        "command": "ai-buddy.clear",
+        "title": "AI Buddy: Clear Chat"
+      },
+      {
+        "command": "ai-buddy.debug",
+        "title": "AI Buddy: Enter Debug Mode"
+      },
+      {
+        "command": "ai-buddy.brainstorm",
+        "title": "AI Buddy: Enter Brainstorm Mode"
       }
     ],
     "viewsContainers": {
@@ -33,6 +45,25 @@
           "type": "webview",
           "id": "buddy-chat",
           "name": "Buddy Chat"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "ai-buddy.clear",
+          "when": "view == buddy-chat",
+          "group": "navigation"
+        },
+        {
+          "command": "ai-buddy.debug",
+          "when": "view == buddy-chat",
+          "group": "navigation"
+        },
+        {
+          "command": "ai-buddy.brainstorm",
+          "when": "view == buddy-chat",
+          "group": "navigation"
         }
       ]
     }

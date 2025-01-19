@@ -16,7 +16,7 @@
 	});
 
 	document.querySelector('.send').addEventListener('click', () => {
-		//console.log("clicked!");
+		console.log("clicked!");
 		const chatMessage = {user: "You", chatMessage: document.getElementById("msg-input").value}
         addMessage(chatMessage);
 		document.getElementById("msg-input").value = '';
@@ -36,6 +36,7 @@
 			}
 			// li.type = 'text';
 			//li.textContent = chatMessage.user + ": " + chatMessage.chatMessage;
+			console.log("before setting msg");
 			li.innerHTML = `${chatMessage.user}: ${chatMessage.chatMessage.replace(/\n/g, '<br>')}`;
 			// li.user = message.user;
 			// li.message = message.message;
@@ -46,14 +47,16 @@
 		scrollToBottom();
 
 		// Update the saved state
+		console.log("past scroll func");
 		vscode.setState({ chatMessages: chatMessages });
 	}
 
 	function scrollToBottom() {
-		element = document.getElementById("chat");
-		setTimeout(() => {
-			element.scrollTop = element.scrollHeight;
-		}, 0); // Ensure the DOM has time to update
+		console.log("scroll func");
+		element = document.getElementsByClassName("message-list")[0];
+		console.log(element);
+		element.scrollTop = element.scrollHeight;
+		//element.scrollToBottom;
 	}
 
 	function appendToLastMessage(chatMessageChunk) {
