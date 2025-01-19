@@ -214,9 +214,9 @@ class BuddyChat implements vscode.WebviewViewProvider {
 			<body>
 				<div class="heading">
 				<h1>Chat with your Debug.Me buddy</h1>
-				<!--<button class="clear">Clear</button>-->
-				<button class="debug">Debug Mode</button>
-				<button class="brainstorm">Brainstorm Mode</button>
+				<!--<button id="clear" class="clear">Clear</button>-->
+				<button id="debug" class="debug">Debug Mode</button>
+				<button id="brainstorm" class="brainstorm">Brainstorm Mode</button>
 				</div>
 				<div id="chat" class="chat">
 					<ol class="message-list"></ol>

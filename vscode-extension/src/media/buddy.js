@@ -27,11 +27,16 @@
 	document.querySelector('.debug').addEventListener('click', () => {
 		console.log("clicked!");
 		vscode.postMessage({ message: "debug" });
+		document.getElementById("debug").style.backgroundColor = "lightskyblue";
+		document.getElementById("brainstorm").style.backgroundColor = "lightblue";
+
     });
 
 	document.querySelector('.brainstorm').addEventListener('click', () => {
 		console.log("clicked!");
 		vscode.postMessage({ message: "brainstorm" });
+		document.getElementById("debug").style.backgroundColor = "lightblue";
+		document.getElementById("brainstorm").style.backgroundColor = "lightskyblue";
     });
 
 	// document.querySelector('.clear').addEventListener('click', () => {

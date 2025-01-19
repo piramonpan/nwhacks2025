@@ -76,6 +76,10 @@ button {
     margin: 2pt;
 }
 
+button.debug {
+    background-color: lightskyblue;
+}
+
 button.send:hover {
     background-color: lightskyblue; /* Darker blue on hover */
 }
