@@ -1,2 +1,3 @@
 model/
 .env
+assistant_response.txt
